@@ -55,13 +55,13 @@ L.geoJSON(geojson,{
 onEachFeature: function (feature, layer) {
     console.log(feature);
     layer.bindPopup(`
-      <h4>${feature.properties.name} (${feature.geometry.coordinates} m)</h4>
+      <h4>${feature.properties.name} (${feature.geometry.coordinates[3]}) m</h4>
       <hr>
       <ul>
-      <li>Lufttemperatur (°C): ${feature.properties.LT !== undefined ? feature.properties.LT : "-"}</li>
-      <li>Relative Luftfeuchte (%): ${feature.properties.RH || "-"}</li>
-      <li>Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}</li>
-      <li>Schneehöhe( cm): ${feature.properties.HS || "-"}</li>
+      <li> Lufttemperatur (°C): ${feature.properties.LT || "-"}</li>
+      <li> Relative Luftfeuchte (%): ${feature.properties.RH || "-"}</li>
+      <li> Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}</li>
+      <li> Schneehöhe (cm): ${feature.properties.HS || "-"}</li>
       </ul>
       ${feature.properties.date}
     `);
