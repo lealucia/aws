@@ -47,7 +47,7 @@ L.geoJSON(geojson,{
             icon: L.icon({
                 iconUrl: "icons/wifi.png",
                 iconAnchor:[16, 37], //IconAnchor sagt dann wo der NUllpunkt ist (also da wo die GPSdatensind)
-                popupAnchor:[0,-37], //Hier kann ich einstellen wo sich POpup öffnen soll, damit ich Marker noch see
+                popupAnchor:[0,-37], //Hier kann ich einstellen wo sich POpup öffnen soll, damit ich Marker noch sehe
         })
     })
 },
@@ -55,7 +55,7 @@ L.geoJSON(geojson,{
 onEachFeature: function (feature, layer) {
     console.log(feature);
     layer.bindPopup(`
-      <h4>${feature.properties.name} (${feature.geometry.coordinates[3]}) m</h4>
+      <h4>${feature.properties.name} (${feature.geometry.coordinates[3]|| "-"}) m</h4>
       <hr>
       <ul>
       <li> Lufttemperatur (°C): ${feature.properties.LT || "-"}</li>
