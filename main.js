@@ -16,6 +16,7 @@ let themaLayer = {
     stations: L.featureGroup(),
     temperature: L.featureGroup().addTo(map),
     wind: L.featureGroup().addTo(map),
+    snow: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -85,6 +86,10 @@ function showWind(geojson) {
         }
     }) .addTo(themaLayer.wind);
 }
+
+//Schneehöhe 
+
+
 
 // GeoJSON der Wetterstationen laden
 async function showStations(url) {
