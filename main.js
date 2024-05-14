@@ -34,39 +34,87 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
+ function getColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+}
+
+// Temperatur
+function showTemperature(geojson) {
+    L.geoJSON(geojson, {
+        filter: function(feature) {
+            // feature.properties.LT
+            if (feature.properties.LT > -50 && feature.properties.LT < 50) {
+                return true;
+            }
+        },
+        pointToLayer: function(feature,latlng) {
+            let color = getColor(feature.properties.LT, COLORS.temperature);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color:${color};">${feature.properties.LT.toFixed(1)}</span>`
+                })
+            })
+        }
+    }) .addTo(themaLayer.temperature);
+}
+
+//Wind
+function showWind(geojson) {
+    L.geoJSON(geojson, {
+        filter: function(feature) {
+            // feature.properties.WG
+            if (feature.properties.WG > 0 && feature.properties.WG < 250) {
+                return true;
+            }
+        },
+        pointToLayer: function(feature,latlng) {
+            let color = getColor(feature.properties.WG, COLORS.wind);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon-wind",
+                    html: `<span title="${feature.properties.WG.toFixed(1)} km/h"><i style="transform:rotate(${feature.properties.WR}deg);color:${color}" class="fa-solid fa-circle-arrow-down"></i></span>`
+                })
+            })
+        }
+    }) .addTo(themaLayer.wind);
+}
+
 // GeoJSON der Wetterstationen laden
 async function showStations(url) {
     let response = await fetch(url);
     let geojson = await response.json();
 
     // Wetterstationen mit Icons und Popups
-    console.log(geojson)
-L.geoJSON(geojson,{
-    pointToLayer: function (feature, latlng){
-        return L.marker(latlng,{
-            icon: L.icon({
-                iconUrl: "icons/wifi.png",
-                iconAnchor:[16, 37], //IconAnchor sagt dann wo der NUllpunkt ist (also da wo die GPSdatensind)
-                popupAnchor:[0,-37], //Hier kann ich einstellen wo sich POpup öffnen soll, damit ich Marker noch sehe
-        })
-    })
-},
-
-onEachFeature: function (feature, layer) {
-    console.log(feature);
-    layer.bindPopup(`
-      <h4>${feature.properties.name} (${feature.geometry.coordinates[3]|| "-"}) m</h4>
-      <hr>
-      <ul>
-      <li> Lufttemperatur (°C): ${feature.properties.LT || "-"}</li>
-      <li> Relative Luftfeuchte (%): ${feature.properties.RH || "-"}</li>
-      <li> Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}</li>
-      <li> Schneehöhe (cm): ${feature.properties.HS || "-"}</li>
-      </ul>
-      ${feature.properties.date}
-    `);
-}
-}).addTo(themaLayer.stations);
-
+    L.geoJSON(geojson, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/wifi.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37]
+                })
+            });
+        },
+        onEachFeature: function (feature, layer) {
+            let pointInTime = new Date(feature.properties.date);
+            layer.bindPopup(`
+                  <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m)</h4>
+                  <ul>
+                  <li> Lufttemperatur (°C): ${feature.properties.LT || "-"}
+                  <li> Relative Luftfeuchte (%): ${feature.properties.RH || "-"}
+                  <li> Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}
+                  <li> Schneehöhe (cm): ${feature.properties.SH || "-"}
+                  </ul>
+                  <span>${pointInTime.toLocaleString()}</span>
+                `)
+        }
+    }).addTo(themaLayer.stations);
+    showTemperature(geojson);
+    showWind(geojson);
 }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
