@@ -14,8 +14,8 @@ let map = L.map("map", {
 // thematische Layer
 let themaLayer = {
     stations: L.featureGroup(),
-    temperature: L.featureGroup().addTo(map),
-    wind: L.featureGroup().addTo(map),
+    temperature: L.featureGroup(),
+    wind: L.featureGroup(),
     snow: L.featureGroup().addTo(map),
 }
 
@@ -111,6 +111,20 @@ function showSnow (geojson) {
 }
 }).addTo(themaLayer.snow);
 }
+
+ // Change default options
+ L.control.rainviewer({ 
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
+
+
 
 // GeoJSON der Wetterstationen laden
 async function showStations(url) {
