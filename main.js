@@ -136,7 +136,7 @@ async function showStations(url) {
                   <li> Lufttemperatur (°C): ${feature.properties.LT || "-"}
                   <li> Relative Luftfeuchte (%): ${feature.properties.RH || "-"}
                   <li> Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}
-                  <li> Schneehöhe (cm): ${feature.properties.HS || "-"}
+                  <li> Schneehöhe (cm): ${feature.properties.SH || "-"}
                   </ul>
                   <span>${pointInTime.toLocaleString()}</span>
                 `)
