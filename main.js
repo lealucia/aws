@@ -29,7 +29,10 @@ L.control.layers({
     "Esri WorldTopoMap": L.tileLayer.provider("Esri.WorldTopoMap"),
     "Esri WorldImagery": L.tileLayer.provider("Esri.WorldImagery")
 }, {
-    "Wetterstationen": themaLayer.stations
+    "Wetterstationen": themaLayer.stations,
+    "Temperatur in °C": themaLayer.temperature,
+    "Windgeschwindigkeit in km/h": themaLayer.wind,
+    "Schneehöhe in cm": themaLayer.snow,
 }).addTo(map);
 
 // Maßstab
